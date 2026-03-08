@@ -1,0 +1,23 @@
+name: docker-build-push
+on:
+  workflow_dispatch: 
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest 
+    steps:
+      - name: code checkout
+        uses: actions/checkout@v4
+        
+      - name: login to DockerHub
+        uses: docker/login-actions@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      
+      - name: docker-build-push
+        uses: docker/build-push-actions@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/github-actions-practice:latest
